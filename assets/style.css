@@ -32,4 +32,10 @@ button {
   background-color: rgb(80, 32, 214);
   border-radius: 100%;
   position: absolute;
+}
+
+#tail div {
+  background-color: rgb(84, 214, 32);
+  border-radius: 100%;
+  position: absolute;
 }/*# sourceMappingURL=style.css.map */

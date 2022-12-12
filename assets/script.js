@@ -1,21 +1,32 @@
 let startGame = document.getElementById("startGame");
 let snakeGame = document.getElementById("snakeGrid");
 
-console.log(snakeGame.offsetHeight);
+let gameWidth = snakeGame.style.width = Math.floor((snakeGame.offsetHeight/100))*100;
+let gameHeight = snakeGame.style.height = Math.floor((snakeGame.offsetWidth/100))*100;
 
 let head = document.createElement("div");
 let snakeFruit = document.createElement("div");
+let tailBox = document.createElement("div");
+tailBox.setAttribute("id","tail");
+snakeGame.append(tailBox);    
 
-
-let headX = (snakeGame.offsetWidth / 2) - (head.offsetWidth / 2);
-let headY = (snakeGame.offsetWidth / 2) - (head.offsetWidth / 2);
-let moveOffset;
+let headX = (gameWidth / 2) - (head.offsetWidth / 2);
+let headY = (gameHeight / 2) - (head.offsetHeight / 2);
 let headWidth;
+
 let headHeight;
+let moveOffset;
+
 let fruitX;
 let fruitY;
+
 let fruitWidth;
 let fruitHeight;
+
+let valueX;
+let valueY;
+const tail = [];
+
 let timer = 500; 
 
 function createSnake(){
@@ -41,52 +52,94 @@ function movingSnake (direction){
     switch (direction){
 
         case "RIGHT" : 
+        previousX = headX;
+        previousY = headY;
         headX += moveOffset;
         head.style.left = `${headX}px`;
         break;
 
         case "UP" : 
+        previousX = headX;
+        previousY = headY;
         headY -= moveOffset;
         head.style.top = `${headY}px`;
         break;
 
-        case "LEFT": 
+        case "LEFT":
+        previousX = headX;
+        previousY = headY;     
         headX -= moveOffset;
         head.style.left = `${headX}px`;
         break;
 
         case "DOWN": 
+        previousX = headX;
+        previousY = headY;
         headY += moveOffset;
         head.style.top = `${headY}px`;
         break;
     }
 
-    if ((headX + moveOffset) > snakeGame.offsetWidth ||
+    if ((headX + moveOffset) > gameWidth ||
      headX < 0 || 
      headY < 0 ||
-     (headY + moveOffset) > snakeGame.offsetHeight){
+     (headY + moveOffset) > gameHeight){
         removeSnake();
        
     } else {
+
     }
 
-    if ( headX > fruitX && headX < (fruitX + fruitWidth) && headY > fruitY && headY < (fruitY + fruitHeight)){
-        console.log("Touched!");
+    if (fruitX == headX && fruitY == headY){
+        createFruit();
+        addSnakeTail();
     } else {
-        console.log("Missed");
     }
+
+    setInterval( () => { 
+        let tailElements = document.getElementById("tail").querySelectorAll("div");
+
+       for (let i = 0 ; i < tailElements.length-1 ; i++){
+
+    
+  
+        tailElements[0].style.left = `${previousX}px`;
+        tailElements[0].style.top = `${previousY}px`;
+
+     if (i > 0 ){
+            tailElements[i].style.left = tailElements[i-1].style.left;
+            tailElements[i].style.top = tailElements[i-1].style.top;  
+        }
+
+    
+
+    }},
+    timer);
+
 }
+
+function addSnakeTail(){
+        let tailItem = document.createElement("div");
+        tailItem.style.width = `${10}px`;
+        tailItem.style.height = `${10}px`;
+        tailItem.style.left = `${headX}px`;
+        tailItem.style.top = `${headY}px`;
+        tailBox.appendChild(tailItem);
+}
+
+
+
 
 let timing = setInterval(() => {movingSnake(direction)}, timer);
 
 function removeSnake(){
     head.remove();
-    headWidth = snakeGame.offsetWidth/10;
-    headHeight = snakeGame.offsetHeight/10;
+    headWidth = gameWidth/10;
+    headHeight = gameHeight/10;
     head.style.width = `${headWidth}px`;
     head.style.height = `${headHeight}px`;
-    headX = (snakeGame.offsetWidth / 2) - (head.offsetWidth / 2);
-    headY = (snakeGame.offsetWidth / 2) - (head.offsetWidth / 2);
+    headX = Math.floor((gameWidth / 2) - (head.offsetWidth / 2));
+    headY = Math.floor((gameHeight/ 2) - (head.offsetWidth / 2));
     clearInterval(timing);
 }
 
@@ -94,12 +147,11 @@ function createFruit(){
     snakeFruit.setAttribute("id","snakeFruit");
     snakeFruit.style.width = `${10}px`;
     snakeFruit.style.height = `${10}px`;
-    fruitX = (Math.random() * (( snakeGame.offsetWidth) - ( 0 + moveOffset))) + moveOffset;
-    fruitY = (Math.random() * (( snakeGame.offsetHeight) - ( 0 + moveOffset))) + moveOffset;
+    fruitX = Math.floor((Math.random() * gameWidth)/10)*10;
+    fruitY = Math.floor((Math.random() * gameHeight)/10)*10;
     snakeFruit.style.left = `${fruitX}px`;
     snakeFruit.style.top = `${fruitY}px`;
-    console.log(snakeFruit.style.top);
-    console.log(snakeFruit.style.left);
+
     snakeGame.appendChild(snakeFruit);
     fruitWidth = 10;
     fruitHeight = 10;
