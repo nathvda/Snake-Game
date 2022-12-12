@@ -69,12 +69,15 @@ function movingSnake (direction){
 
 for (let i = 0 ; i < tailElements.length ; i++){
 
+    
+
 previousX = headX;
 previousY = headY;
 
 if (i == 0){
 tailElements[0].style.left = `${previousX}px`;
 tailElements[0].style.top = `${previousY}px`;
+tailElements[i].style.display = "block";
 }
 
 if (i > 0){
@@ -83,6 +86,8 @@ tailElements[i-1].style.left = tailElements[i].style.left;
 tailElements[i-1].style.top = tailElements[i].style.top;
 tailElements[i].style.left = valueX;
 tailElements[i].style.top = valueY;
+tailElements[i].style.display = "block";
+
 }
 
 valueX = tailElements[i].style.left;
@@ -149,6 +154,7 @@ function addSnakeTail(){
         tailItem.style.width = `${10}px`;
         tailItem.style.height = `${10}px`;
         tailBox.appendChild(tailItem);
+        tailItem.style.display = "none";
 
 }
 
