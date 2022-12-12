@@ -82,6 +82,7 @@ valueX = tailElements[i].style.left;
 valueY = tailElements[i].style.top;
 }
 
+
     switch (direction){
 
         case "RIGHT" : 
@@ -106,9 +107,11 @@ valueY = tailElements[i].style.top;
     }
 
     for(let i = 0 ; i < tailElements.length ; i++){
-       
-        if ((head.style.left == tailElements[i].style.left) && (head.style.left == tailElements[i].style.left)){
-           removeSnake(); 
+        console.log(tailElements[i].style.left);
+        console.log(tailElements[i].style.top);
+
+        if ((head.style.left == tailElements[i].style.left) && (head.style.top == tailElements[i].style.top)){
+           removeSnake();
         }
     }
 
@@ -144,6 +147,7 @@ let timing = setInterval(() => {movingSnake(direction)}, timer);
 
 function removeSnake(){
     head.remove();
+    tailBox.innerHTML = "";
     headWidth = gameWidth/10;
     headHeight = gameHeight/10;
     head.style.width = `${headWidth}px`;
