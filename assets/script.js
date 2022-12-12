@@ -25,9 +25,13 @@ let fruitHeight;
 
 let valueX;
 let valueY;
+
+let previousX;
+let previousY;
+;
 const tail = [];
 
-let timer = 500; 
+let timer = 100; 
 
 function createSnake(){
 
@@ -48,36 +52,64 @@ startGame.addEventListener('click', () => {
 
 let direction = ""; 
 
+
+
 function movingSnake (direction){
+
+
+
+    let tailElements = document.getElementById("tail").querySelectorAll("div");
+
+for (let i = 0 ; i < tailElements.length ; i++){
+
+previousX = headX;
+previousY = headY;
+
+if (i == 0){
+tailElements[0].style.left = `${previousX}px`;
+tailElements[0].style.top = `${previousY}px`;
+}
+
+if (i > 0){
+    
+tailElements[i-1].style.left = tailElements[i].style.left;
+tailElements[i-1].style.top = tailElements[i].style.top;
+tailElements[i].style.left = valueX;
+tailElements[i].style.top = valueY;
+}
+
+valueX = tailElements[i].style.left;
+valueY = tailElements[i].style.top;
+}
+
     switch (direction){
 
         case "RIGHT" : 
-        previousX = headX;
-        previousY = headY;
         headX += moveOffset;
         head.style.left = `${headX}px`;
         break;
 
         case "UP" : 
-        previousX = headX;
-        previousY = headY;
         headY -= moveOffset;
         head.style.top = `${headY}px`;
         break;
 
-        case "LEFT":
-        previousX = headX;
-        previousY = headY;     
+        case "LEFT": 
         headX -= moveOffset;
         head.style.left = `${headX}px`;
         break;
 
         case "DOWN": 
-        previousX = headX;
-        previousY = headY;
         headY += moveOffset;
         head.style.top = `${headY}px`;
         break;
+    }
+
+    for(let i = 0 ; i < tailElements.length ; i++){
+       
+        if ((head.style.left == tailElements[i].style.left) && (head.style.left == tailElements[i].style.left)){
+           removeSnake(); 
+        }
     }
 
     if ((headX + moveOffset) > gameWidth ||
@@ -87,34 +119,14 @@ function movingSnake (direction){
         removeSnake();
        
     } else {
-
     }
 
     if (fruitX == headX && fruitY == headY){
         createFruit();
         addSnakeTail();
     } else {
+
     }
-
-    setInterval( () => { 
-        let tailElements = document.getElementById("tail").querySelectorAll("div");
-
-       for (let i = 0 ; i < tailElements.length-1 ; i++){
-
-    
-  
-        tailElements[0].style.left = `${previousX}px`;
-        tailElements[0].style.top = `${previousY}px`;
-
-     if (i > 0 ){
-            tailElements[i].style.left = tailElements[i-1].style.left;
-            tailElements[i].style.top = tailElements[i-1].style.top;  
-        }
-
-    
-
-    }},
-    timer);
 
 }
 
@@ -122,11 +134,9 @@ function addSnakeTail(){
         let tailItem = document.createElement("div");
         tailItem.style.width = `${10}px`;
         tailItem.style.height = `${10}px`;
-        tailItem.style.left = `${headX}px`;
-        tailItem.style.top = `${headY}px`;
         tailBox.appendChild(tailItem);
-}
 
+}
 
 
 
