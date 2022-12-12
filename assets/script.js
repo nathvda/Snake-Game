@@ -28,13 +28,19 @@ let valueY;
 
 let previousX;
 let previousY;
-;
 const tail = [];
+let timing;
 
-let timer = 100; 
+let timer = 150; 
+let direction; 
+let score = 0;
 
-function createSnake(){
+let scoreBox = document.getElementById("score");
 
+function newGame(){
+
+    clearInterval(timing);
+    direction = "";  
     head.setAttribute("id","snakeHead");
     snakeGame.appendChild(head);
     head.style.left = `${headX}px`;
@@ -42,16 +48,17 @@ function createSnake(){
     head.style.width = `${10}px`;
     head.style.height = `${10}px`;
     moveOffset = head.offsetWidth;
+    timing = setInterval(() => {movingSnake(direction)}, timer);
+    score = 0;
+    scoreBox.innerHTML = `Score : ${score}`;
+    createFruit();
 
 }
 
 startGame.addEventListener('click', () => {
-    createSnake();
-    createFruit();}
+    newGame();
+}
     );
-
-let direction = ""; 
-
 
 
 function movingSnake (direction){
@@ -120,11 +127,15 @@ valueY = tailElements[i].style.top;
      headY < 0 ||
      (headY + moveOffset) > gameHeight){
         removeSnake();
+        alert(`You lost ! Your score is : ${score}`);
+        alert(`Snake length : ${tailElements.length+1}`);
        
     } else {
     }
 
     if (fruitX == headX && fruitY == headY){
+        score += 20;
+        scoreBox.innerHTML = `Score : ${score}`;
         createFruit();
         addSnakeTail();
     } else {
@@ -141,13 +152,10 @@ function addSnakeTail(){
 
 }
 
-
-
-let timing = setInterval(() => {movingSnake(direction)}, timer);
-
 function removeSnake(){
     head.remove();
     tailBox.innerHTML = "";
+    snakeFruit.remove();
     headWidth = gameWidth/10;
     headHeight = gameHeight/10;
     head.style.width = `${headWidth}px`;
